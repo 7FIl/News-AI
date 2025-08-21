@@ -1,6 +1,11 @@
 import requests
+from dotenv import load_dotenv
+import os
 
-kunci = "sk-33XlE-C9aGoU3M0ZRkMFVkFgYEqENs9PxnO55vzfhBOiOvHstzfYQRHIOTjfyraC"
+load_dotenv()
+
+
+kunci = os.getenv("UNLI_API_KEY")
 
 url = "https://api.unli.dev/v1/chat/completions"
 body = {

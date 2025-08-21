@@ -1,6 +1,10 @@
 import requests
+import os
+from dotenv import load_dotenv
 
-kunci = "sk-dc8cdbffcb44c61768ccd612cbe9788f536e391c2163cfdb"
+load_dotenv()
+
+kunci = os.getenv("LUNOS_API_KEY")
 
 url = "https://api.lunos.tech/v1/chat/completions"
 body = {
