@@ -131,9 +131,9 @@
                         Biarkan AI kami menganalisis berita yang Anda temukan.
                     </p>
                     <div class="flex space-x-4">
-                        <button class="check-btn text-white px-6 py-3 rounded-lg font-medium">
+                        <a href="#detector-section" class="check-btn text-white px-6 py-3 rounded-lg font-medium">
                             Coba Sekarang
-                        </button>
+                        </a>
                         <button class="bg-transparent border border-purple-500 text-purple-300 px-6 py-3 rounded-lg font-medium hover:bg-purple-900 hover:bg-opacity-20 transition">
                             Pelajari Lebih Lanjut
                         </button>
@@ -141,7 +141,7 @@
                 </div>
                 <div class="md:w-1/2 flex justify-center">
                     <div class="relative max-w-md">
-                        <img src="https://placehold.co/600x600" alt="3D ilustrasi AI sedang menganalisis dokumen dengan floating elements di latar belakang gelap" class="rounded-lg glow-effect" />
+                        <a href="https://ibb.co.com/5xvXjHpv"><img src="https://i.ibb.co.com/YT84dsn8/Gemini-Generated-Image-hpaadchpaadchpaa-1.webp" alt="Gemini-Generated-Image-hpaadchpaadchpaa-1" class="rounded-2xl glow-effect" /></a>
                         <div class="absolute -bottom-6 -right-6 bg-purple-900 rounded-full w-32 h-32 opacity-20 animate-pulse-slow"></div>
                     </div>
                 </div>
@@ -150,7 +150,7 @@
     </section>
 
     <!-- AI Detector Section -->
-    <section class="py-20 px-4">
+    <section id="detector-section" class="py-20 px-4">
         <div class="max-w-4xl mx-auto bg-secondary-dark rounded-xl p-6 shadow-lg border border-purple-900 border-opacity-20">
             <h2 class="text-3xl font-bold text-center mb-8 purple-gradient-text">Deteksi Hoax Sekarang</h2>
             
@@ -159,14 +159,8 @@
                 <textarea id="news-text" rows="6" class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-500" placeholder="Salin dan tempel teks berita yang ingin Anda verifikasi..."></textarea>
             </div>
             
-            <div class="flex items-center justify-between">
-                <div>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" class="form-checkbox h-5 w-5 text-purple-600 rounded bg-secondary-dark border-purple-500">
-                        <span class="ml-2 text-gray-300">Periksa juga tautan terkait</span>
-                    </label>
-                </div>
-                <button class="check-btn text-white px-6 py-3 rounded-lg font-medium">
+            <div class="flex items-center justify-end">
+                <button id="analyze-btn" class="check-btn text-white px-6 py-3 rounded-lg font-medium">
                     Analisis dengan AI
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -176,13 +170,35 @@
         </div>
     </section>
 
+    <!-- Results Section (Initially Hidden) -->
+    <section id="results-section" class="py-20 px-4 hidden">
+        <div class="max-w-4xl mx-auto bg-secondary-dark rounded-xl p-8 shadow-lg border border-purple-900 border-opacity-20">
+            <h2 class="text-3xl font-bold text-center mb-2 purple-gradient-text">Hasil Analisis</h2>
+            <p id="overall-verdict" class="text-center text-5xl font-bold mb-4"></p>
+            <div id="counts-container" class="flex justify-center items-center space-x-4 sm:space-x-6 mb-8 text-sm sm:text-base"></div>
+
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold text-white mb-3">Ringkasan Berita</h3>
+                <p id="summary" class="text-gray-400 bg-primary-dark p-4 rounded-lg"></p>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-semibold text-white mb-4">Detail Verifikasi Klaim</h3>
+                <div id="details-container" class="space-y-4">
+                    <!-- Claim details will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- How It Works -->
-    <section class="py-16 px-4 bg-secondary-dark">
+    <section class="py-16 px-4 bg-primary-dark">
         <div class="max-w-7xl mx-auto">
             <h2 class="text-3xl font-bold text-center mb-16 purple-gradient-text">Bagaimana AI Kami Bekerja</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-primary-dark p-6 rounded-xl border border-purple-900 border-opacity-20 hover:border-opacity-50 transition">
+                <div class="bg-secondary-dark p-6 rounded-xl border border-purple-900 border-opacity-20 hover:border-opacity-50 transition">
                     <div class="w-16 h-16 bg-purple-900 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -192,7 +208,7 @@
                     <p class="text-gray-400">AI kami menganalisis struktur bahasa, pola kata, dan metrik lainnya untuk mendeteksi ciri-ciri berita palsu.</p>
                 </div>
                 
-                <div class="bg-primary-dark p-6 rounded-xl border border-purple-900 border-opacity-20 hover:border-opacity-50 transition">
+                <div class="bg-secondary-dark p-6 rounded-xl border border-purple-900 border-opacity-20 hover:border-opacity-50 transition">
                     <div class="w-16 h-16 bg-purple-900 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -202,7 +218,7 @@
                     <p class="text-gray-400">Sistem kami memverifikasi klaim dengan basis data fakta dan sumber terpercaya yang terus diperbarui.</p>
                 </div>
                 
-                <div class="bg-primary-dark p-6 rounded-xl border border-purple-900 border-opacity-20 hover:border-opacity-50 transition">
+                <div class="bg-secondary-dark p-6 rounded-xl border border-purple-900 border-opacity-20 hover:border-opacity-50 transition">
                     <div class="w-16 h-16 bg-purple-900 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -210,108 +226,6 @@
                     </div>
                     <h3 class="text-xl font-semibold text-white mb-2">Hasil Akurat</h3>
                     <p class="text-gray-400">Dapatkan laporan komprehensif dengan tingkat keakuratan tinggi yang mencakup analisis detail.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Recent Analysis -->
-    <section class="py-16 px-4">
-        <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12 purple-gradient-text">Analisis Terbaru</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- News Card 1 -->
-                <div class="news-card rounded-xl p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="bg-purple-900 bg-opacity-30 text-purple-300 px-3 py-1 rounded-full text-xs font-medium">HOAX</span>
-                        <span class="text-gray-500 text-sm">2 jam lalu</span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-3">Presiden akan mundur dari jabatannya?</h3>
-                    <p class="text-gray-400 mb-4 line-clamp-3">Beredar kabar bahwa presiden akan mengundurkan diri bulan depan karena alasan kesehatan. Setelah dianalisis, klaim ini tidak memiliki dasar...</p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 rounded-full bg-purple-800 mr-2 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-300" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <span class="text-gray-300 text-sm">Pengguna Anonim</span>
-                        </div>
-                        <a href="#" class="text-purple-400 hover:text-purple-300 text-sm font-medium">Lihat Analisis →</a>
-                    </div>
-                </div>
-                
-                <!-- News Card 2 -->
-                <div class="news-card rounded-xl p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="bg-green-900 bg-opacity-30 text-green-300 px-3 py-1 rounded-full text-xs font-medium">VALID</span>
-                        <span class="text-gray-500 text-sm">5 jam lalu</span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-3">Kebijakan baru pendidikan di tahun 2024</h3>
-                    <p class="text-gray-400 mb-4 line-clamp-3">Menteri Pendidikan mengumumkan kebijakan baru mengenai kurikulum sekolah. Setelah diverifikasi, informasi ini sesuai dengan pernyataan resmi...</p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 rounded-full bg-green-800 mr-2 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-300" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <span class="text-gray-300 text-sm">Lisa Permata</span>
-                        </div>
-                        <a href="#" class="text-purple-400 hover:text-purple-300 text-sm font-medium">Lihat Analisis →</a>
-                    </div>
-                </div>
-                
-                <!-- News Card 3 -->
-                <div class="news-card rounded-xl p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <span class="bg-red-900 bg-opacity-30 text-red-300 px-3 py-1 rounded-full text-xs font-medium">HOAX</span>
-                        <span class="text-gray-500 text-sm">1 hari lalu</span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-3">Vaksin menyebabkan efek samping mematikan</h3>
-                    <p class="text-gray-400 mb-4 line-clamp-3">Klaim bahwa vaksin terbaru menyebabkan efek samping mematikan telah dibantah oleh berbagai penelitian ilmiah dan bukti medis. Informasi ini...</p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 rounded-full bg-red-800 mr-2 flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-300" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <span class="text-gray-300 text-sm">Doni Surya</span>
-                        </div>
-                        <a href="#" class="text-purple-400 hover:text-purple-300 text-sm font-medium">Lihat Analisis →</a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-10">
-                <button class="bg-transparent border border-purple-500 text-purple-300 px-6 py-3 rounded-lg font-medium hover:bg-purple-900 hover:bg-opacity-20 transition">
-                    Lihat Semua Analisis
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="py-16 px-4 bg-secondary-dark">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-                <div class="p-6">
-                    <h3 class="text-4xl font-bold text-purple-400 mb-2">10K+</h3>
-                    <p class="text-gray-300">Berita Dianalisis</p>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-4xl font-bold text-purple-400 mb-2">98%</h3>
-                    <p class="text-gray-300">Akurasi Analisis</p>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-4xl font-bold text-purple-400 mb-2">3.2K</h3>
-                    <p class="text-gray-300">Hoax Terdeteksi</p>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-4xl font-bold text-purple-400 mb-2">24/7</h3>
-                    <p class="text-gray-300">Layanan Aktif</p>
                 </div>
             </div>
         </div>
@@ -357,25 +271,6 @@
                         </svg>
                         <span class="text-gray-400">info@hoaxdetector.ai</span>
                     </div>
-                    <div class="flex space-x-4 mt-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-purple-900 bg-opacity-20 flex items-center justify-center hover:bg-opacity-40 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-300" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 0a10 10 0 100 20 10 10 0 000-20zm3.828 10.5a4.5 4.5 0 00-1.414-3.113l-.465-.361a2.5 2.5 0 01-.72-3.526 4.5 4.5 0 002.6 1.42zm1.43 1.407a4.49 4.49 0 00-1.23-2.81l-.258.203a2.5 2.5 0 01-.813 3.68 4.5 4.5 0 002.301-.073zm-6.228.086a2.5 2.5 0 01-3.126-3.077 4.5 4.5 0 001.41 2.564l.403.302a2.5 2.5 0 011.313.211zM6.3 7.33a2.5 2.5 0 013.68-.813l.203.258a4.5 4.5 0 00-1.43 1.43L6.3 7.33z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-purple-900 bg-opacity-20 flex items-center justify-center hover:bg-opacity-40 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-300" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                            </svg>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-purple-900 bg-opacity-20 flex items-center justify-center hover:bg-opacity-40 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-300" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 0a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 100-16 8 8 0 000 16z" clip-rule="evenodd" />
-                                <path fill-rule="evenodd" d="M10 14a4 4 0 100-8 4 4 0 000 8z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                    </div>
                 </div>
             </div>
             <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
@@ -384,43 +279,7 @@
         </div>
     </footer>
 
-    <!-- JS for AI Analysis -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Mock analysis function
-            document.querySelector('.check-btn').addEventListener('click', function() {
-                const newsText = document.getElementById('news-text').value;
-                
-                if (!newsText.trim()) {
-                    alert('Silakan masukkan teks berita yang ingin Anda analisis');
-                    return;
-                }
-                
-                // Show loading state
-                const btn = this;
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Sedang menganalisis...';
-                
-                // Simulate API call
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    
-                    // Show results
-                    alert('Analisis selesai!\n\nHasil: Berita ini memiliki ciri-ciri hoax dengan tingkat kepercayaan 87%.\n\nLihat detail lengkapnya di halaman hasil.');
-                }, 3000);
-            });
-            
-            // Smooth scroll for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-        });
-    </script>
+    <!-- MODIFIED: Added a version number to the script tag to prevent caching issues -->
+    <script src="js/script.js?v=1.2"></script>
 </body>
 </html>

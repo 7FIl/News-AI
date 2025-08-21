@@ -1,245 +1,158 @@
-// CONFIGURASI
-const API_ENDPOINT = "https://api";
-const DEFAULT_ERROR_MSG = "Terjadi kesalahan, silakan coba lagi";
-
-// ELEMEN DOM UTAMA
-const elements = {
-  textTab: document.getElementById('text-tab'),
-  linkTab: document.getElementById('link-tab'),
-  textTabContent: document.getElementById('text-tab-content'),
-  linkTabContent: document.getElementById('link-tab-content'),
-  newsText: document.getElementById('news-text'),
-  newsLink: document.getElementById('news-link'),
-  analyzeBtn: document.querySelector('.check-btn'),
-  analyzeLinkBtn: document.getElementById('analyze-link-btn'),
-  resultContainer: document.getElementById('result-container'),
-};
-
-// STATE APLIKASI
-const state = {
-  currentAnalysis: null,
-  isLoading: false
-};
-
-// INISIALISASI
-function init() {
-  setupEventListeners();
-  checkForSavedResults();
-}
-
-// SETUP EVENT LISTENERS
-function setupEventListeners() {
-  // Tab Navigation
-  elements.textTab.addEventListener('click', switchToTextTab);
-  elements.linkTab.addEventListener('click', switchToLinkTab);
-  
-  // Analysis Buttons
-  elements.analyzeBtn.addEventListener('click', analyzeText);
-  elements.analyzeLinkBtn.addEventListener('click', analyzeLink);
-  
-  // Shared DOM Events
-  document.addEventListener('click', handleDocumentClick);
-}
-
-// FUNGSI TAB NAVIGATION
-function switchToTextTab() {
-  elements.textTab.classList.add('active-tab');
-  elements.linkTab.classList.remove('active-tab');
-  elements.textTabContent.classList.remove('hidden');
-  elements.linkTabContent.classList.add('hidden');
-}
-
-function switchToLinkTab() {
-  elements.linkTab.classList.add('active-tab');
-  elements.textTab.classList.remove('active-tab');
-  elements.linkTabContent.classList.remove('hidden');
-  elements.textTabContent.classList.add('hidden');
-}
-
-// FUNGSI ANALISIS TEKS
-async function analyzeText() {
-  const text = elements.newsText.value.trim();
-  
-  if (!text) {
-    showAlert('error', 'Silakan masukkan teks berita');
-    return;
-  }
-
-  try {
-    toggleLoading(true, elements.analyzeBtn);
+document.addEventListener('DOMContentLoaded', function() {
+    // --- DOM Elements ---
+    const analyzeBtn = document.getElementById('analyze-btn');
+    const newsText = document.getElementById('news-text');
     
-    // Simulasi API call
-    const analysisResult = await mockTextAnalysisAPI(text);
+    // --- Main Function ---
+    async function handleAnalysis() {
+        // MODIFIED: Get elements inside the function to ensure they exist
+        const resultsSection = document.getElementById('results-section');
+        const overallVerdictEl = document.getElementById('overall-verdict');
+        const countsContainer = document.getElementById('counts-container');
+        const summaryEl = document.getElementById('summary');
+        const detailsContainer = document.getElementById('details-container');
+
+        // MODIFIED: Add a check to ensure all result elements are present before fetching
+        if (!resultsSection || !overallVerdictEl || !countsContainer || !summaryEl || !detailsContainer) {
+            alert('Terjadi galat pada halaman: Elemen hasil tidak ditemukan. Coba lakukan hard refresh (Ctrl+Shift+R).');
+            return;
+        }
+
+        const text = newsText.value.trim();
+        if (!text) {
+            alert('Silakan masukkan teks berita yang ingin Anda analisis.');
+            return;
+        }
+
+        setLoadingState(true);
+        
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+            controller.abort();
+        }, 60000);
+
+        try {
+            const response = await fetch('/check-news', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: text }),
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ error: 'An unknown server error occurred.' }));
+                throw new Error(`HTTP error! status: ${response.status} - ${errorData.error}`);
+            }
+
+            const data = await response.json();
+            displayResults(data, { resultsSection, overallVerdictEl, countsContainer, summaryEl, detailsContainer });
+
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                alert('Analisis melewati batas waktu 60 detik. Server mungkin kelebihan beban atau artikel terlalu panjang. Silakan coba lagi.');
+            } else {
+                console.error('Analysis Error:', error);
+                alert(`Terjadi kesalahan saat menganalisis berita: ${error.message}`);
+            }
+            resultsSection.classList.add('hidden');
+        } finally {
+            setLoadingState(false);
+        }
+    }
+
+    // --- UI Helper Functions ---
+
+    function setLoadingState(isLoading) {
+        if (isLoading) {
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Menganalisis...`;
+        } else {
+            analyzeBtn.disabled = false;
+            analyzeBtn.innerHTML = `
+                Analisis dengan AI
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>`;
+        }
+    }
+
+    function displayResults(data, elements) {
+        const { resultsSection, overallVerdictEl, countsContainer, summaryEl, detailsContainer } = elements;
+
+        summaryEl.textContent = data.summary || 'Tidak ada ringkasan yang tersedia.';
+        
+        const verdict = data.overall_verdict || 'INCONCLUSIVE';
+        overallVerdictEl.textContent = verdict;
+        overallVerdictEl.className = `text-center text-5xl font-bold mb-4 ${getVerdictColor(verdict)}`;
+
+        countsContainer.innerHTML = '';
+        if (data.counts) {
+            countsContainer.innerHTML = `
+                <span class="text-green-400 font-semibold">✓ ${data.counts.accurate} Akurat</span>
+                <span class="text-yellow-400 font-semibold">! ${data.counts.misleading} Menyesatkan</span>
+                <span class="text-red-400 font-semibold">✗ ${data.counts.false} Salah</span>
+                <span class="text-gray-400 font-semibold">? ${data.counts.unverifiable} Tidak Terverifikasi</span>
+            `;
+        }
+
+        detailsContainer.innerHTML = '';
+        if (data.details && data.details.length > 0) {
+            data.details.forEach(item => {
+                const detailCard = createDetailCard(item);
+                detailsContainer.appendChild(detailCard);
+            });
+        } else {
+            detailsContainer.innerHTML = '<p class="text-gray-500">Tidak ada detail klaim yang ditemukan.</p>';
+        }
+
+        resultsSection.classList.remove('hidden');
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function createDetailCard(item) {
+        const card = document.createElement('div');
+        card.className = 'bg-primary-dark p-4 rounded-lg border border-gray-700';
+
+        const verdictColor = getVerdictColor(item.verdict);
+
+        card.innerHTML = `
+            <div class="flex justify-between items-start">
+                <p class="text-gray-300 flex-1 pr-4"><strong>Klaim:</strong> ${item.claim}</p>
+                <span class="font-bold px-2 py-1 rounded-md text-sm ${verdictColor}">${item.verdict}</span>
+            </div>
+            <p class="text-gray-400 mt-2 text-sm"><strong>Penjelasan:</strong> ${item.explanation}</p>
+            ${item.sources && item.sources.length > 0 ? `
+            <div class="mt-3">
+                <p class="text-sm text-gray-500">Sumber:</p>
+                <ul class="list-disc list-inside text-sm">
+                    ${item.sources.map(src => `<li><a href="${src}" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:underline">${src}</a></li>`).join('')}
+                </ul>
+            </div>
+            ` : ''}
+        `;
+        return card;
+    }
+
+    function getVerdictColor(verdict) {
+        if (!verdict) return 'text-gray-400';
+        const v = verdict.toUpperCase();
+        if (v.includes('FALSE')) return 'text-red-400';
+        if (v.includes('ACCURATE') || v.includes('TRUE')) return 'text-green-400';
+        if (v.includes('MISLEADING') || v.includes('MIXED')) return 'text-yellow-400';
+        return 'text-gray-400';
+    }
     
-    // Simpan hasil dan redirect
-    saveAnalysisResult(analysisResult);
-    window.location.href = 'compare.html';
-    
-  } catch (error) {
-    showAlert('error', error.message || DEFAULT_ERROR_MSG);
-  } finally {
-    toggleLoading(false, elements.analyzeBtn);
-  }
-}
-
-// FUNGSI ANALISIS LINK
-async function analyzeLink() {
-  const url = elements.newsLink.value.trim();
-  
-  if (!url) {
-    showAlert('error', 'Silakan masukkan URL berita');
-    return;
-  }
-
-  if (!isValidUrl(url)) {
-    showAlert('error', 'Format URL tidak valid');
-    return;
-  }
-
-  try {
-    toggleLoading(true, elements.analyzeLinkBtn);
-    
-    // Simulasi API call
-    const analysisResult = await mockLinkAnalysisAPI(url);
-    
-    // Simpan hasil dan redirect
-    saveAnalysisResult(analysisResult);
-    window.location.href = 'compare.html';
-    
-  } catch (error) {
-    showAlert('error', error.message || DEFAULT_ERROR_MSG);
-  } finally {
-    toggleLoading(false, elements.analyzeLinkBtn);
-  }
-}
-
-// HELPER FUNCTIONS
-function toggleLoading(isLoading, element) {
-  state.isLoading = isLoading;
-  
-  if (isLoading) {
-    element.innerHTML = `
-      <svg class="animate-spin h-5 w-5 inline-block mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-      </svg>
-      Memproses...
-    `;
-    element.disabled = true;
-  } else {
-    element.innerHTML = element === elements.analyzeBtn ? 
-      'Analisis dengan AI <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>' : 
-      'Analisis Link <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" /></svg>';
-    element.disabled = false;
-  }
-}
-
-function isValidUrl(string) {
-  try {
-    new URL(string);
-    return true;
-  } catch (_) {
-    return false;  
-  }
-}
-
-function showAlert(type, message) {
-  const alertDiv = document.createElement('div');
-  alertDiv.className = `fixed top-4 right-4 p-4 rounded-lg ${type === 'error' ? 'bg-red-900 text-red-100' : 'bg-green-900 text-green-100'}`;
-  alertDiv.textContent = message;
-  
-  document.body.appendChild(alertDiv);
-  
-  setTimeout(() => {
-    alertDiv.classList.add('opacity-0', 'transition', 'duration-300');
-    setTimeout(() => alertDiv.remove(), 300);
-  }, 3000);
-}
-
-function saveAnalysisResult(result) {
-  sessionStorage.setItem('analysisData', JSON.stringify(result));
-}
-
-function checkForSavedResults() {
-  const savedData = sessionStorage.getItem('analysisData');
-  if (savedData && window.location.pathname.includes('compare.html')) {
-    state.currentAnalysis = JSON.parse(savedData);
-    renderComparisonResult();
-  }
-}
-
-// FUNGSI RENDER HASIL (untuk compare.html)
-function renderComparisonResult() {
-  if (!state.currentAnalysis) return;
-
-  const { status, confidence, sources, matchedClaims, confusingClaims, falseClaims } = state.currentAnalysis;
-  
-  // Update UI elements
-  document.getElementById('verification-status').textContent = status === 'hoax' ? 'HOAX' : 'VALID';
-  document.getElementById('verification-status').className = status === 'hoax' ? 
-    'fact-check-badge bg-red-900 bg-opacity-30 text-red-300' : 
-    'fact-check-badge bg-green-900 bg-opacity-30 text-green-300';
-  
-  document.getElementById('confidence-score').textContent = `${confidence}%`;
-  document.getElementById('trust-score').style.width = `${confidence}%`;
-  
-  // Render klaim-klaim
-  renderClaimsList(falseClaims, 'false-claims-list', 'text-red-400');
-  renderClaimsList(confusingClaims, 'confusing-claims-list', 'text-yellow-400');
-  renderClaimsList(matchedClaims, 'matched-claims-list', 'text-green-400');
-}
-
-function renderClaimsList(claims, elementId, textColorClass) {
-  const container = document.getElementById(elementId);
-  if (!container) return;
-  
-  container.innerHTML = claims.map(claim => 
-    `<li class="flex items-start mb-2">
-      <span class="${textColorClass} mr-2">•</span>
-      <span>${claim}</span>
-     </li>`
-  ).join('');
-}
-
-// MOCK API FUNCTIONS (akan diganti dengan API sebenarnya)
-async function mockTextAnalysisAPI(text) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({
-        status: Math.random() > 0.5 ? 'hoax' : 'valid',
-        confidence: Math.floor(Math.random() * 30) + 70, // 70-100%
-        sources: Math.floor(Math.random() * 10) + 5, // 5-15 sumber
-        matchedClaims: ['Klaim tentang kondisi ekonomi', 'Data tanggal kejadian'],
-        confusingClaims: ['Pernyataan tentang kebijakan baru'],
-        falseClaims: ['Informasi kesehatan presiden', 'Jadwal pengunduran diri'],
-        analyzedText: text,
-        date: new Date().toISOString()
-      });
-    }, 1500);
-  });
-}
-
-async function mockLinkAnalysisAPI(url) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({
-        status: Math.random() > 0.7 ? 'hoax' : 'valid',
-        confidence: Math.floor(Math.random() * 40) + 60, // 60-100%
-        sources: Math.floor(Math.random() * 15) + 5, // 5-20 sumber
-        matchedClaims: ['Lokasi kejadian', 'Nama institusi terkait'],
-        confusingClaims: ['Motif pelaku'],
-        falseClaims: ['Jumlah korban', 'Tanggal kejadian sebenarnya'],
-        analyzedUrl: url,
-        date: new Date().toISOString()
-      });
-    }, 2000);
-  });
-}
-
-// HANDLERS
-function handleDocumentClick(e) {
-  // Handle click events yang bersifat global
-}
-
-// START APP
-document.addEventListener('DOMContentLoaded', init);
+    // Add event listener to the analyze button
+    if (analyzeBtn) {
+        analyzeBtn.addEventListener('click', handleAnalysis);
+    } else {
+        console.error('Tombol analisis tidak ditemukan. Pastikan ID "analyze-btn" ada di HTML.');
+    }
+});

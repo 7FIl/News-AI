@@ -4,14 +4,18 @@
 import os
 import json
 import requests
-from flask import Flask, request, jsonify
+# MODIFIED: Added send_from_directory
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS 
 from dotenv import load_dotenv
 
 # ==============================================================================
 # SECTION 2: SETUP AND CONFIGURATION
 # ==============================================================================
 load_dotenv()
-app = Flask(__name__)
+# MODIFIED: Point to the correct static folder (your project's root)
+app = Flask(__name__, static_folder='../', static_url_path='/')
+CORS(app) 
 
 # --- API Keys & IDs from .env file ---
 LUNOS_API_KEY = os.getenv('LUNOS_API_KEY')
@@ -28,6 +32,26 @@ UNLI_API_URL = "https://api.unli.dev/v1/chat/completions"
 GOOGLE_SEARCH_URL = "https://www.googleapis.com/customsearch/v1"
 
 # ==============================================================================
+# NEW SECTION: ROUTES FOR SERVING FRONTEND FILES
+# ==============================================================================
+
+@app.route('/')
+def serve_index():
+    # Serves the index.html file from the root directory
+    return send_from_directory('../', 'index.html')
+
+@app.route('/js/<path:path>')
+def serve_js(path):
+    # Serves any file from the 'js' directory
+    return send_from_directory('../js', path)
+
+@app.route('/css/<path:path>')
+def serve_css(path):
+    # Serves any file from the 'css' directory
+    return send_from_directory('../css', path)
+
+
+# ==============================================================================
 # SECTION 3: HELPER FUNCTIONS (The Three Specialists)
 # ==============================================================================
 
@@ -37,12 +61,14 @@ def extract_claims_with_unli(text_content):
     system_prompt = "You are an expert news analysis assistant. Your sole purpose is to read a news article, extract its key factual claims, and provide a brief summary. Format your entire response as a single, valid JSON object with two keys: 'summary' and 'claims'. Do not add any conversational text."
     user_prompt = f"Please analyze the following news article: {text_content}"
     headers = {'Authorization': f'Bearer {UNLI_API_KEY}', 'Content-Type': 'application/json', 'X-App-ID': LUNOS_APP_ID}
-    payload = {'model': 'unli-auto', 'messages': [{'role': 'system', 'content': system_prompt}, {'role': 'user', 'content': user_prompt}]} # IMPORTANT: Get model name from Unli docs
+    payload = {'model': 'unli-auto', 'messages': [{'role': 'system', 'content': system_prompt}, {'role': 'user', 'content': user_prompt}]}
     try:
         response = requests.post(UNLI_API_URL, headers=headers, json=payload)
         response.raise_for_status()
         ai_response_data = response.json()
         json_string_content = ai_response_data['choices'][0]['message']['content']
+        if json_string_content.strip().startswith("```json"):
+            json_string_content = json_string_content.strip()[7:-3]
         parsed_json = json.loads(json_string_content)
         print("Unli.dev analysis successful.")
         return parsed_json
@@ -80,6 +106,8 @@ def _verify_single_claim_with_lunos(claim_text, search_evidence, search_sources)
         response.raise_for_status()
         ai_response_data = response.json()
         json_string_content = ai_response_data['choices'][0]['message']['content']
+        if json_string_content.strip().startswith("```json"):
+            json_string_content = json_string_content.strip()[7:-3]
         final_json = json.loads(json_string_content)
         final_json['sources'] = search_sources
         return final_json
@@ -108,36 +136,74 @@ def check_claims_with_lunos(claims_list):
 def check_news_endpoint():
     print("\n--- New Request Received at /check-news ---")
     data = request.get_json()
-    if not data or 'content' not in data: return jsonify({'error': 'No content provided in the request.'}), 400
+    if not data or 'content' not in data: 
+        return jsonify({'error': 'No content provided in the request.'}), 400
     
     news_content = data.get('content')
     analyst_result = extract_claims_with_unli(news_content)
     
-    if not analyst_result or 'claims' not in analyst_result or not analyst_result['claims']: return jsonify({'error': 'AI Analyst (Unli.dev) failed to extract claims.'}), 500
+    if not analyst_result or 'claims' not in analyst_result:
+        return jsonify({'error': 'AI Analyst (Unli.dev) failed to extract claims or returned a malformed response.'}), 500
     
     summary = analyst_result.get('summary', 'No summary available.')
-    claims = analyst_result['claims']
+    claims = analyst_result.get('claims', [])
     
+    if not claims:
+        print("--- Request Complete. No claims found to verify. ---")
+        return jsonify({
+            'summary': summary,
+            'overall_verdict': 'INCONCLUSIVE',
+            'counts': {'accurate': 0, 'misleading': 0, 'false': 0, 'unverifiable': 1},
+            'details': [{
+                'claim': 'No specific claims were identified in the text.',
+                'verdict': 'UNVERIFIABLE',
+                'explanation': 'The AI analyst could not extract any factual claims to verify from the provided article.',
+                'sources': []
+            }]
+        })
+
     fact_check_results = check_claims_with_lunos(claims)
     
     details = fact_check_results.get('results', [])
-    verdicts = [result.get('verdict', 'INCONCLUSIVE').upper() for result in details]
+    verdicts = [str(result.get('verdict', 'INCONCLUSIVE')).upper() for result in details]
     total_claims = len(verdicts)
-    overall_verdict = 'INCONCLUSIVE'
-    # (The nuanced verdict logic from before - no changes needed)
-    if total_claims > 0:
-        true_count = verdicts.count('TRUE')
-        false_count = verdicts.count('FALSE')
-        misleading_count = verdicts.count('MISLEADING')
-        if misleading_count > 0: overall_verdict = 'MISLEADING'
-        elif false_count > 0:
-            if true_count / total_claims >= 0.7: overall_verdict = 'MOSTLY ACCURATE'
-            elif false_count / total_claims >= 0.7: overall_verdict = 'MOSTLY FALSE'
-            elif false_count == total_claims: overall_verdict = 'FALSE'
-            else: overall_verdict = 'MIXED'
-        elif false_count == 0 and misleading_count == 0 and true_count > 0: overall_verdict = 'ACCURATE'
     
-    final_response = {'summary': summary, 'overall_verdict': overall_verdict, 'details': details}
+    accurate_keywords = ['TRUE', 'ACCURATE']
+    misleading_keywords = ['MISLEADING', 'PARTIALLY TRUE']
+    false_keywords = ['FALSE', 'INACCURATE']
+    
+    accurate_count = sum(1 for v in verdicts if any(kw in v for kw in accurate_keywords))
+    misleading_count = sum(1 for v in verdicts if any(kw in v for kw in misleading_keywords))
+    false_count = sum(1 for v in verdicts if any(kw in v for kw in false_keywords))
+    unverifiable_count = total_claims - (accurate_count + misleading_count + false_count)
+
+    overall_verdict = 'INCONCLUSIVE'
+    if total_claims > 0:
+        if false_count > 0:
+            if accurate_count / total_claims >= 0.7:
+                overall_verdict = 'MOSTLY ACCURATE'
+            elif false_count / total_claims >= 0.7:
+                overall_verdict = 'MOSTLY FALSE'
+            else:
+                overall_verdict = 'MIXED'
+        elif misleading_count > 0:
+            overall_verdict = 'MISLEADING'
+        elif accurate_count == total_claims:
+            overall_verdict = 'ACCURATE'
+        elif accurate_count > 0:
+             overall_verdict = 'ACCURATE'
+    
+    final_response = {
+        'summary': summary, 
+        'overall_verdict': overall_verdict, 
+        'counts': {
+            'accurate': accurate_count,
+            'misleading': misleading_count,
+            'false': false_count,
+            'unverifiable': unverifiable_count
+        },
+        'details': details
+    }
     print("--- Request Complete. Sending final response. ---")
     return jsonify(final_response)
 
