@@ -1,0 +1,131 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #0f0f13; /* Hitam pekat */
+    color: #e0e0e0; /* Warna teks */
+    line-height: 1.6;
+}
+
+/* Navbar */
+nav {
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(138, 43, 226, 0.3);
+}
+
+nav a {
+    color: #e0e0e0;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #ffffff; /* Warna saat hover */
+}
+
+/* Hero Section */
+.hero-gradient {
+    background: linear-gradient(135deg, #0f0f13 0%, #1a1a24 100%);
+    padding: 50px 0;
+    text-align: center;
+}
+
+.hero-gradient h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.hero-gradient p {
+    font-size: 1.2rem;
+}
+
+/* Button Styles */
+.check-btn {
+    background: linear-gradient(90deg, #8a2be2, #6a1fb8);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.check-btn:hover {
+    background: linear-gradient(90deg, #6a1fb8, #8a2be2);
+}
+
+/* Input Fields */
+.input-field {
+    background-color: rgba(26, 26, 36, 0.7);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    transition: border-color 0.3s;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #8a2be2;
+}
+
+/* Card Styles */
+.news-comparison-card {
+    background-color: #1a1a24;
+    border: 1px solid rgba(138, 43, 226, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.3s, border-color 0.3s;
+}
+
+.news-comparison-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(138, 43, 226, 0.3);
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(138, 43, 226, 0.1);
+}
+
+th {
+    background-color: #1a1a24;
+    color: #8a2be2;
+}
+
+/* Alert Styles */
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 1000;
+    transition: opacity 0.3s;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .hero-gradient h1 {
+        font-size: 2rem;
+    }
+
+    .check-btn {
+        width: 100%;
+    }
+}

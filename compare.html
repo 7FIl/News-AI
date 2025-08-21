@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perbandingan Berita | Hoax Detector AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-dark: #0f0f13;
+            --secondary-dark: #1a1a24;
+            --accent-purple: #8a2be2;
+            --accent-purple-light: #9c4dff;
+            --accent-purple-dark: #6a1fb8;
+            --green-accent: #10b981;
+            --red-accent: #ef4444;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-dark);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        
+        .glow-effect {
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+        }
+        
+        .purple-gradient-text {
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-purple-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .green-gradient-text {
+            background: linear-gradient(90deg, var(--green-accent), #34d399);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .red-gradient-text {
+            background: linear-gradient(90deg, var(--red-accent), #f87171);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .news-comparison-card {
+            background-color: var(--secondary-dark);
+            border-radius: 0.75rem;
+            border: 1px solid rgba(138, 43, 226, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .news-comparison-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(138, 43, 226, 0.3);
+        }
+        
+        .fact-check-badge {
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+        
+        .spotlight-effect {
+            position: relative;
+        }
+        
+        .spotlight-effect::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 0.5rem;
+            background: linear-gradient(45deg, var(--accent-purple), transparent);
+            z-index: -1;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- Navbar -->
+    <nav class="bg-black bg-opacity-80 backdrop-blur-md fixed w-full z-50 border-b border-purple-900 border-opacity-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <a href="index.html" class="text-2xl font-bold purple-gradient-text">
+                            <span class="text-white">HOAX</span>DETECTOR AI
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-4">
+                        <a href="index.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Beranda</a>
+                        <a href="#" class="text-purple-300 px-3 py-2 rounded-md text-sm font-medium">Perbandingan Berita</a>
+                        <a href="#" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contoh</a>
+                        <a href="#" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Tentang</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-300 hover:text-white focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Comparison Hero Section -->
+    <section class="hero-gradient pt-32 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center">
+                <span class="inline-block px-4 py-1 rounded-full bg-purple-900 bg-opacity-30 text-purple-300 text-sm font-medium mb-4">
+                    HASIL ANALISIS
+                </span>
+                <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">
+                    <span class="purple-gradient-text">Perbandingan</span> 
+                    <span class="text-white">Berita</span>
+                </h1>
+                <p class="text-gray-300 max-w-3xl mx-auto text-lg">
+                    Berikut adalah perbandingan mendetail antara berita yang Anda masukkan dengan sumber-sumber terpercaya untuk membantu Anda melihat perbedaan dan menemukan kebenaran.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Main Content -->
+    <section class="py-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- Overview Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="news-comparison-card p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-purple-300">Status Verifikasi</h3>
+                        <span class="fact-check-badge bg-red-900 bg-opacity-30 text-red-300">HOAX</span>
+                    </div>
+                    <p class="text-gray-400 mb-2 text-sm">Tingkat Kecocokan:</p>
+                    <div class="w-full bg-gray-700 rounded-full h-2.5 mb-4">
+                        <div class="bg-red-500 h-2.5 rounded-full" style="width: 22%"></div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Berita ini memiliki kesesuaian rendah dengan sumber terpercaya</p>
+                </div>
+                
+                <div class="news-comparison-card p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-purple-300">Tingkat Kepercayaan</h3>
+                        <span class="text-xl font-bold green-gradient-text">87%</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">AI kami yakin dengan <span class="text-green-400 font-medium">tingkat tinggi</span> bahwa analisis ini akurat berdasarkan:</p>
+                    <ul class="text-gray-400 text-sm space-y-1">
+                        <li class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            15 Sumber Terpercaya
+                        </li>
+                        <li class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            Analisis 32 Poin Kunci
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="news-comparison-card p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-purple-300">Detail Analisis</h3>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <ul class="text-gray-400 text-sm space-y-2">
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-400 mr-2 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                            </svg>
+                            <span>7 Klaim Tidak Terbukti</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400 mr-2 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm7-1a1 1 0 11-2 0 1 1 0 012 0zm-.464 5.535a1 1 0 10-1.415-1.414 3 3 0 01-4.242 0 1 1 0 00-1.415 1.414 5 5 0 007.072 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>3 Klaim Membingungkan</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400 mr-2 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <span>2 Klaim Terverifikasi</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Side-by-Side Comparison -->
+            <div class="bg-secondary-dark rounded-xl p-6 mb-12 border border-purple-900 border-opacity-20 spotlight-effect">
+                <h2 class="text-2xl font-bold text-center mb-8 purple-gradient-text">Perbandingan Konten</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- User's Submitted News -->
+                    <div class="news-comparison-card p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold red-gradient-text">Berita yang Anda Masukkan</h3>
+                            <span class="fact-check-badge bg-red-900 bg-opacity-30 text-red-300">HOAX</span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <img src="https://placehold.co/600x400" alt="Ilustrasi berita hoax dengan tampilan sensasional dan gambar mengkhawatirkan" class="w-full rounded-lg mb-3">
+                            <h4 class="text-lg font-semibold text-white mb-2">Presiden Akan Mengundurkan Diri Bulan Depan!</h4>
+                            <p class="text-gray-400 text-sm">Menurut sumber dekat istana, presiden akan mengumumkan pengunduran dirinya karena masalah kesehatan serius yang dideritanya...</p>
+                        </div>
+                        
+                        <div class="border-t border-gray-700 pt-4">
+                            <h5 class="font-medium text-red-300 mb-2">Klaim Utama:</h5>
+                            <ul class="text-gray-400 text-sm space-y-2 pl-5 list-disc">
+                                <li>Presiden menderita penyakit langka</li>
+                                <li>Akan mengumumkan pengunduran diri</li>
+                                <li>Sumber dari staf istana</li>
+                                <li>Tidak ada rencana suksesi</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Verified News -->
+                    <div class="news-comparison-card p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold green-gradient-text">Berita Terverifikasi</h3>
+                            <span class="fact-check-badge bg-green-900 bg-opacity-30 text-green-300">VALID</span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <img src="https://placehold.co/600x400" alt="Presiden sedang menghadiri acara resmi dengan penampilan sehat dan tersenyum" class="w-full rounded-lg mb-3">
+                            <h4 class="text-lg font-semibold text-white mb-2">Presiden Tetap Bekerja dengan Baik</h4>
+                            <p class="text-gray-400 text-sm">Juru bicara istana membantah kabar tentang rencana pengunduran diri presiden, menyatakan bahwa kondisi kesehatan presiden baik dan tetap bekerja seperti biasa...</p>
+                        </div>
+                        
+                        <div class="border-t border-gray-700 pt-4">
+                            <h5 class="font-medium text-green-300 mb-2">Fakta:</h5>
+                            <ul class="text-gray-400 text-sm space-y-2 pl-5 list-disc">
+                                <li>Presiden hadir di acara resmi kemarin</li>
+                                <li>Pernyataan resmi dari juru bicara</li>
+                                <li>Rekam medis terakhir menunjukkan kesehatan baik</li>
+                                <li>Rencana kerja sampai akhir masa jabatan</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 bg-primary-dark rounded-lg border border-purple-900 border-opacity-30">
+                    <div class="flex items-start">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <h4 class="font-semibold text-purple-300 mb-1">Analisis AI Kami:</h4>
+                            <p class="text-gray-400 text-sm">Berita yang Anda masukkan mengandung beberapa klaim yang bertentangan dengan sumber-sumber terpercaya. Sistem kami menemukan bahwa 85% klaim dalam berita ini tidak memiliki bukti yang cukup dan beberapa diantaranya sudah dibantah oleh pernyataan resmi.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Key Differences -->
+            <div class="bg-secondary-dark rounded-xl p-6 mb-12 border border-purple-900 border-opacity-20">
+                <h2 class="text-2xl font-bold text-center mb-8 purple-gradient-text">Perbedaan Kunci</h2>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-400">
+                        <thead class="text-xs text-purple-300 uppercase bg-primary-dark">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Klaim</th>
+                                <th scope="col" class="px-6 py-3">Berita Anda</th>
+                                <th scope="col" class="px-6 py-3">Berita Valid</th>
+                                <th scope="col" class="px-6 py-3">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-700 bg-secondary-dark">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white">Kondisi Presiden</th>
+                                <td class="px-6 py-4">Menderita penyakit langka</td>
+                                <td class="px-6 py-4">Dalam kondisi sehat</td>
+                                <td class="px-6 py-4"><span class="text-red-400">Tidak Terbukti</span></td>
+                            </tr>
+                            <tr class="border-b border-gray-700 bg-secondary-dark">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white">Rencana Pengunduran</th>
+                                <td class="px-6 py-4">Akan mengundurkan diri</td>
+                                <td class="px-6 py-4">Tetap menjabat</td>
+                                <td class="px-6 py-4"><span class="text-red-400">Dibantah</span></td>
+                            </tr>
+                            <tr class="border-b border-gray-700 bg-secondary-dark">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white">Sumber Informasi</th>
+                                <td class="px-6 py-4">Sumber tidak disebutkan</td>
+                                <td class="px-6 py-4">Pernyataan resmi istana</td>
+                                <td class="px-6 py-4"><span class="text-red-400">Tidak Diverifikasi</span></td>
+                            </tr>
+                            <tr class="bg-secondary-dark">
+                                <th scope="row" class="px-6 py-4 font-medium whitespace-nowrap text-white">Agenda Kerja</th>
+                                <td class="px-6 py-4">Tidak ada agenda jelas</td>
+                                <td class="px-6 py-4">Jadwal kerja normal</td>
+                                <td class="px-6 py-4"><span class="text-red-400">Bertentangan</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Trusted Sources -->
+            <div class="bg-secondary-dark rounded-xl p-6 border border-purple-900 border-opacity-20">
+                <h2 class="text-2xl font-bold text-center mb-8 purple-gradient-text">Sumber Terpercaya</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="news-comparison-card p-4 flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-purple-900 bg-opacity-20 flex items-center justify-center mr-4">
+                            <img src="https://placehold.co/48x48" alt="Logo media terpercaya 1" class="rounded-full">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-white">Media Indonesia</h4>
+                            <p class="text-gray-400 text-sm">Pernyataan resmi dari juru bicara kepresidenan</p>
+                            <a href="#" class="text-purple-400 hover:text-purple-300 text-xs">Baca selengkapnya →</a>
+                        </div>
+                    </div>
+                    
+                    <div class="news-comparison-card p-4 flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-purple-900 bg-opacity-20 flex items-center justify-center mr-4">
+                            <img src="https://placehold.co/48x48" alt="Logo media terpercaya 2" class="rounded-full">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-white">Kantor Berita Nasional</h4>
+                            <p class="text-gray-400 text-sm">Liputan acara resmi presiden kemarin</p>
+                            <a href="#" class="text-purple-400 hover:text-purple-300 text-xs">Baca selengkapnya →</a>
+                        </div>
+                    </div>
+                    
+                    <div class="news-comparison-card p-4 flex items-center">
+                        <div class="w-12 h-12 rounded-full bg-purple-900 bg-opacity-20 flex items-center justify-center mr-4">
+                            <img src="https://placehold.co/48x48" alt="Logo media terpercaya 3" class="rounded-full">
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-white">Portal Fakta</h4>
+                            <p class="text-gray-400 text-sm">Analisis fakta tentang berita kesehatan presiden</p>
+                            <a href="#" class="text-purple-400 hover:text-purple-300 text-xs">Baca selengkapnya →</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button class="bg-transparent border border-purple-500 text-purple-300 px-6 py-3 rounded-lg font-medium hover:bg-purple-900 hover:bg-opacity-20 transition">
+                        Lihat Semua Sumber
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Share Section -->
+    <section class="py-16 px-4 bg-primary-dark">
+        <div class="max-w-2xl mx-auto text-center">
+            <h2 class="text-2xl font-bold mb-6 purple-gradient-text">Bagikan Hasil Analisis Ini</h2>
+            <p class="text-gray-400 mb-8">Bantu orang lain mengetahui kebenaran dengan membagikan hasil analisis ini</p>
+            
+            <div class="flex justify-center space-x-4">
+                <button class="flex items-center px-4 py-2 rounded-full bg-blue-900 bg-opacity-30 text-blue-300 hover:bg-opacity-50 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M20 10c0-5.523-4.477-10-10-10S0 4.477 0 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V10h2.54V7.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V10h2.773l-.443 2.89h-2.33v6.988C16.343 19.128 20 14.991 20 10z" clip-rule="evenodd" />
+                    </svg>
+                    Facebook
+                </button>
+                <button class="flex items-center px-4 py-2 rounded-full bg-blue-400 bg-opacity-30 text-blue-100 hover:bg-opacity-50 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
+                    </svg>
+                    Twitter
+                </button>
+                <button class="flex items-center px-4 py-2 rounded-full bg-red-600 bg-opacity-30 text-red-300 hover:bg-opacity-50 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    WhatsApp
+                </button>
+            </div>
+            
+            <div class="mt-8">
+                <div class="flex items-center max-w-md mx-auto bg-secondary-dark rounded-lg overflow-hidden">
+                    <input type="text" value="https://hoaxdetector.ai/analisis/123456" readonly class="flex-1 px-4 py-2 bg-transparent text-gray-300 text-sm" id="share-link">
+                    <button onclick="copyShareLink()" class="px-4 py-2 bg-purple-900 text-purple-300 hover:bg-purple-800 transition text-sm font-medium">
+                        Salin Link
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black bg-opacity-80 py-12 px-4 border-t border-purple-900 border-opacity-20">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-xl font-bold purple-gradient-text mb-4">HOAXDETECTOR AI</h4>
+                    <p class="text-gray-400">Platform deteksi hoax berbasis AI dengan teknologi canggih untuk membantu masyarakat menemukan kebenaran.</p>
+                </div>
+                <div>
+                    <h5 class="text-lg font-semibold text-white mb-4">Menu</h5>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-purple-300 transition">Beranda</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-300 transition">Perbandingan Berita</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-300 transition">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-300 transition">Tentang Kami</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-lg font-semibold text-white mb-4">Bantuan</h5>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-purple-300 transition">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-300 transition">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-300 transition">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-purple-300 transition">Hubungi Kami</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-lg font-semibold text-white mb-4">Hubungi Kami</h5>
+                    <div class="flex items-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-400 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        <span class="text-gray-400">info@hoaxdetector.ai</span>
+                    </div>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-purple-900 bg-opacity-20 flex items-center justify-center hover:bg-opacity-40 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-300" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 0a10 10 0 100 20 10 10 0 000-20zm3.828 10.5a4.5 4.5 0 00-1.414-3.113l-.465-.361a2.5 2.5 0 01-.72-3.526 4.5 4.5 0 002.6 1.42zm1.43 1.407a4.49 4.49 0 00-1.23-2.81l-.258.203a2.5 2.5 0 01-.813 3.68 4.5 4.5 0 002.301-.073zm-6.228.086a2.5 2.5 0 01-3.126-3.077 4.5 4.5 0 001.41 2.564l.403.302a2.5 2.5 0 011.313.211zM6.3 7.33a2.5 2.5 0 013.68-.813l.203.258a4.5 4.5 0 00-1.43 1.43L6.3 7.33z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-purple-900 bg-opacity-20 flex items-center justify-center hover:bg-opacity-40 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-300" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                            </svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-purple-900 bg-opacity-20 flex items-center justify-center hover:bg-opacity-40 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-300" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 0a10 10 0 100 20 10 10 0 000-20zm0 18a8 8 0 100-16 8 8 0 000 16z" clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M10 14a4 4 0 100-8 4 4 0 000 8z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500">
+                <p>© 2025 HoaxDetector AI. Seluruh hak cipta dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Comparison Page -->
+    <script>
+        // Copy share link function
+        function copyShareLink() {
+            const shareLink = document.getElementById('share-link');
+            shareLink.select();
+            document.execCommand('copy');
+            
+            alert('Link berhasil disalin!');
+        }
+        
+        // Mock function for analysis (would be replaced with actual API calls)
+        function analyzeNews() {
+            // This would be replaced with actual analysis logic
+            return {
+                status: 'hoax',
+                confidence: 87,
+                sources: 15,
+                pointsAnalyzed: 32,
+                matchedClaims: 2,
+                confusingClaims: 3,
+                falseClaims: 7
+            };
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
