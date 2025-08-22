@@ -38,17 +38,25 @@
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
-                        <h1 class="text-2xl font-bold purple-gradient-text">
+                        <a href="../Frontend/index.html" class="text-2xl font-bold purple-gradient-text">
                             <span class="text-white">HOAX</span>DETECTOR AI
-                        </h1>
+                        </a>
                     </div>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-center space-x-4">
-                        <a href="#" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Beranda</a>
-                        <a href="#" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contoh</a>
-                        <a href="#" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Tentang</a>
+                        <a href="../Frontend/index.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Beranda</a>
+                        <a href="../Frontend/carakerja.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Cara Kerja</a>
+                        <a href="../Frontend/contoh.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contoh</a>
+                        <a href="../Frontend/tentang.html" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Tentang</a>
                     </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-300 hover:text-white focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
@@ -107,8 +115,17 @@
 
     <!-- Footer -->
     <footer class="bg-black bg-opacity-80 py-12 px-4 border-t border-purple-900 border-opacity-20">
-        <div class="max-w-7xl mx-auto text-center text-gray-500">
-            <p>© 2023 HoaxDetector AI. Seluruh hak cipta dilindungi.</p>
+        <div class="max-w-7xl mx-auto text-center">
+            <div>
+                <h4 class="text-xl font-bold purple-gradient-text mb-4">HOAXDETECTOR AI</h4>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Platform deteksi hoax berbasis AI dengan teknologi canggih untuk membantu masyarakat menemukan kebenaran.
+                </p>
+            </div>
+
+            <div class="mt-8">
+                <p class="text-gray-500 text-sm">A project created for the IMPHNEN Hackathon.</p>
+            </div>
         </div>
     </footer>
 </body>
