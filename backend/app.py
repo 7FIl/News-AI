@@ -38,17 +38,17 @@ GOOGLE_SEARCH_URL = "https://www.googleapis.com/customsearch/v1"
 @app.route('/')
 def serve_index():
     # Serves the index.html file from the root directory
-    return send_from_directory('../Frontend/', 'index.html')
+    return send_from_directory('../', 'index.html')
 
 @app.route('/js/<path:path>')
 def serve_js(path):
     # Serves any file from the 'js' directory
-    return send_from_directory('../Frontend/js', path)
+    return send_from_directory('../js', path)
 
 @app.route('/css/<path:path>')
 def serve_css(path):
     # Serves any file from the 'css' directory
-    return send_from_directory('../Frontend/css', path)
+    return send_from_directory('../css', path)
 
 
 # ==============================================================================

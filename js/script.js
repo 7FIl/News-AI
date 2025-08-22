@@ -155,4 +155,14 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         console.error('Tombol analisis tidak ditemukan. Pastikan ID "analyze-btn" ada di HTML.');
     }
+    
+    // --- Mobile Menu Toggle ---
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
 });
