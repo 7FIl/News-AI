@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contoh Analisis - Hoax Detector AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-dark: #0f0f13;
+            --secondary-dark: #1a1a24;
+            --accent-purple: #8a2be2;
+            --accent-purple-light: #9c4dff;
+            --accent-purple-dark: #6a1fb8;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-dark);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        
+        .purple-gradient-text {
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-purple-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="bg-black bg-opacity-80 backdrop-blur-md fixed w-full z-50 border-b border-purple-900 border-opacity-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <h1 class="text-2xl font-bold purple-gradient-text">
+                            <span class="text-white">HOAX</span>DETECTOR AI
+                        </h1>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Beranda</a>
+                        <a href="#" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Contoh</a>
+                        <a href="#" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Tentang</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Example Analysis Section -->
+    <section class="py-20 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-12 purple-gradient-text">Contoh Analisis Berita</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Example Card 1 -->
+                <div class="bg-secondary-dark rounded-xl p-6 shadow-lg border border-purple-900 border-opacity-20">
+                    <h3 class="text-xl font-semibold text-white mb-3">Klaim Vaksin COVID-19 Menyebabkan Kematian</h3>
+                    <p class="text-gray-400 mb-4">Beredar informasi bahwa vaksin COVID-19 menyebabkan kematian mendadak. Setelah analisis, klaim ini tidak didukung oleh bukti ilmiah yang valid.</p>
+                    <span class="bg-red-900 bg-opacity-30 text-red-300 px-3 py-1 rounded-full text-xs font-medium">HOAX</span>
+                </div>
+                
+                <!-- Example Card 2 -->
+                <div class="bg-secondary-dark rounded-xl p-6 shadow-lg border border-purple-900 border-opacity-20">
+                    <h3 class="text-xl font-semibold text-white mb-3">Pemerintah Akan Menaikkan Pajak</h3>
+                    <p class="text-gray-400 mb-4">Kabar mengenai kenaikan pajak oleh pemerintah telah beredar. Setelah verifikasi, informasi ini ternyata tidak benar dan hanya rumor.</p>
+                    <span class="bg-purple-900 bg-opacity-30 text-purple-300 px-3 py-1 rounded-full text-xs font-medium">HOAX</span>
+                </div>
+                
+                <!-- Example Card 3 -->
+                <div class="bg-secondary-dark rounded-xl p-6 shadow-lg border border-purple-900 border-opacity-20">
+                    <h3 class="text-xl font-semibold text-white mb-3">Kebijakan Baru Pendidikan 2024</h3>
+                    <p class="text-gray-400 mb-4">Menteri Pendidikan mengumumkan kebijakan baru yang akan diterapkan pada tahun 2024. Informasi ini telah dikonfirmasi dan valid.</p>
+                    <span class="bg-green-900 bg-opacity-30 text-green-300 px-3 py-1 rounded-full text-xs font-medium">VALID</span>
+                </div>
+                
+                <!-- Example Card 4 -->
+                <div class="bg-secondary-dark rounded-xl p-6 shadow-lg border border-purple-900 border-opacity-20">
+                    <h3 class="text-xl font-semibold text-white mb-3">Berita Tentang Penemuan Obat Baru</h3>
+                    <p class="text-gray-400 mb-4">Informasi mengenai penemuan obat baru untuk penyakit tertentu telah beredar. Setelah analisis, berita ini terbukti akurat dan berasal dari sumber terpercaya.</p>
+                    <span class="bg-green-900 bg-opacity-30 text-green-300 px-3 py-1 rounded-full text-xs font-medium">VALID</span>
+                </div>
+                
+                <!-- Example Card 5 -->
+                <div class="bg-secondary-dark rounded-xl p-6 shadow-lg border border-purple-900 border-opacity-20">
+                    <h3 class="text-xl font-semibold text-white mb-3">Klaim Makanan Tertentu Menyebabkan Kanker</h3>
+                    <p class="text-gray-400 mb-4">Beredar informasi bahwa makanan tertentu dapat menyebabkan kanker. Setelah verifikasi, klaim ini tidak didukung oleh bukti yang kuat.</p>
+                    <span class="bg-red-900 bg-opacity-30 text-red-300 px-3 py-1 rounded-full text-xs font-medium">HOAX</span>
+                </div>
+                
+                <!-- Example Card 6 -->
+                <div class="bg-secondary-dark rounded-xl p-6 shadow-lg border border-purple-900 border-opacity-20">
+                    <h3 class="text-xl font-semibold text-white mb-3">Kebijakan Baru Transportasi Umum</h3>
+                    <p class="text-gray-400 mb-4">Kebijakan baru mengenai transportasi umum akan diterapkan tahun ini. Informasi ini telah dikonfirmasi oleh pihak berwenang.</p>
+                    <span class="bg-green-900 bg-opacity-30 text-green-300 px-3 py-1 rounded-full text-xs font-medium">VALID</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black bg-opacity-80 py-12 px-4 border-t border-purple-900 border-opacity-20">
+        <div class="max-w-7xl mx-auto text-center text-gray-500">
+            <p>© 2023 HoaxDetector AI. Seluruh hak cipta dilindungi.</p>
+        </div>
+    </footer>
+</body>
+</html>
